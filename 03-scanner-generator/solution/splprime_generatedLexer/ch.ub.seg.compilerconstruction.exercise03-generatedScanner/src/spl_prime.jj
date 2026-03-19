@@ -1,0 +1,49 @@
+options
+{
+    LOOKAHEAD=2; 
+}
+PARSER_BEGIN(SPLPrime)
+public class SPLPrime
+{
+}
+PARSER_END(SPLPrime)
+
+SKIP :
+{
+    " " |   "\r" |   "\t" | "\n" | <"//" (~["\n","\r"])* ("\n"|"\r")> 
+}
+
+TOKEN:
+{
+	<NUMBER: ((["0"-"9"])+ | (["0"-"9"])+"."(["0"-"9"])+)>
+
+	// single characters
+	| <LEFT_PAREN: "(">
+    | <RIGHT_PAREN: ")">
+    | <LEFT_BRACE: "{"> | <RIGHT_BRACE: "}">
+    | <MINUS: "-">    | <PLUS: "+">
+    | <MULT: "*"> | <DIF: "/">
+    | <SEMICOL: ";">
+	| <NOTEQUALS: "!" <EQUAL>>
+	| <NOT: "!">
+
+	| <EQUAL_EQUAL: "==">
+	| <EQUAL: "=">
+	| <GREATER_EQUAL: ">="> | <GREATER: ">" >
+	| <LESS_EQUAL: "<="> | <LESS: "<">
+
+	// keywords
+	| <AND: "and">
+	| <ELSE: "else"> 
+	| <FALSE: "false"> | <TRUE: "true">
+	| <IF: "if">
+	| <OR: "or">
+	| <PRINT: "print">
+	| <VAR: "var"> 
+	| <WHILE: "while">
+
+	| <IDENTIFIER: (["a"-"z"]|["A" - "Z"])+>
+	| <STRING: "\"" ( ~["\"","\\","\n","\r"] | "\\" ( ["n","t","b","r","f","\\","\'","\""] | ["0"-"7"] (["0"-"7"])?  | ["0"-"3"] ["0"-"7"] ["0"-"7"] | ( ["\n","\r"] | "\r\n")))* "\"">
+
+}
+
