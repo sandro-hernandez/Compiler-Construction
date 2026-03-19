@@ -1,0 +1,85 @@
+options {
+	LOOKAHEAD = 2;
+}
+
+PARSER_BEGIN(Arithmetic)
+package part1_tutorial;
+
+public class Arithmetic {}
+PARSER_END(Arithmetic)
+
+// Ignore whitespace
+SKIP :
+{
+ " "
+| "\n"
+| "\t"
+}
+
+// Token definitions
+TOKEN :
+{
+ < NUMBER : (<DIGIT>)+ >
+| < DIGIT : ["0"-"9"] >
+}
+
+// Top rule
+double start():
+{
+  double a;
+}
+{
+  a = expr() <EOF>
+  { return a; }
+}
+
+// Expression rule (+ and -)
+double expr():
+{
+  double a;
+  double b;
+}
+{
+  a = term()
+  (
+    "+" b = term() { a = a + b; }
+  | "-" b = term() { a = a - b; }
+  )*
+  { return a; }
+}
+
+// Multiplication and division
+double term():
+{
+  double a;
+  double b;
+}
+{
+  a = unary()
+  (
+    "*" b = unary() { a = a * b; }
+  | "/" b = unary() { a = a / b; }
+  )*
+  { return a; }
+}
+
+// Unary minus
+double unary():
+{
+  double a;
+}
+{
+    "-" a = element() { return -a; }
+  | a = element()     { return a; }
+}
+
+// Numbers and parentheses
+double element():
+{
+  Token t;
+  double a;
+}
+{
+    t = <NUMBER>      { return Double.parseDouble(t.image); }
+  | "(" a = expr() ")" { return a; }
+}

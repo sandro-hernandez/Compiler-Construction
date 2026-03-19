@@ -1,0 +1,52 @@
+options {
+	LOOKAHEAD = 2;
+}
+
+PARSER_BEGIN(Arithmetic)
+package part1_tutorial;
+
+public class Arithmetic {}
+PARSER_END(Arithmetic)
+
+SKIP :
+{
+ " "
+| "\n"
+| "\t"
+}
+
+TOKEN :
+{
+ < NUMBER : (<DIGIT>)+ >
+| < DIGIT : ["0"-"9"] >
+}
+
+void start():
+{}
+{
+ expr() <EOF>
+}
+
+void expr():
+{}
+{
+ term() (("+" | "-") term())*
+}
+
+void term():
+{}
+{
+ unary() (("*" | "/") unary())*
+}
+
+void unary():
+{}
+{
+ "-" element() | element()
+}
+
+void element():
+{}
+{
+ <NUMBER> | "(" expr() ")"
+}
